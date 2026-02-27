@@ -1,9 +1,8 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 
 
-// ============================================
 // CONTEXT & STATE MANAGEMENT
-// ============================================
+
 
 const AppContext = createContext();
 
@@ -37,7 +36,6 @@ const AppProvider = ({ children }) => {
       try {
         setLoading(true);
         setError(null);
-
         const [productsRes, categoriesRes] = await Promise.all([
           fetch('https://fakestoreapi.com/products'),
           fetch('https://fakestoreapi.com/products/categories')
@@ -141,26 +139,32 @@ const AppProvider = ({ children }) => {
 
 // Loading Component
 const LoadingSpinner = () => (
-  <div className="flex flex-col items-center justify-center min-h-[400px] gap-6">
-    <Loader2 className="w-16 h-16 animate-spin text-rose-500" />
-    <p className="text-sm uppercase tracking-[0.3em] text-neutral-500 font-mono">
-      Loading...
-    </p>
+  <div className="min-h-screen flex items-center justify-center bg-neutral-50">
+    <div className="text-center">
+      <div className="inline-block w-16 h-16 border-4 border-black border-t-transparent rounded-full animate-spin mb-4"></div>
+      <p className="font-mono text-sm uppercase tracking-widest">Loading...</p>
+    </div>
   </div>
 );
 
 // Error Component
 const ErrorState = ({ message, onRetry }) => (
-  <div className="flex flex-col items-center justify-center min-h-[400px] gap-6 p-12 text-center">
-    <AlertCircle className="w-20 h-20 text-rose-500" />
-    <h3 className="text-3xl font-bold font-serif">Something went wrong</h3>
-    <p className="text-neutral-600 max-w-md">{message}</p>
-    <button
-      onClick={onRetry}
-      className="px-8 py-3 bg-black text-white uppercase tracking-wider text-sm font-mono font-semibold hover:bg-neutral-800 transition-all border-2 border-black hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
-    >
-      Try Again
-    </button>
+  <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-6">
+    <div className="text-center max-w-md">
+      <div className="w-12 h-12 text-rose-500 mb-4 flex items-center justify-center mx-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-full h-full">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+      </div>
+      <h2 className="font-serif text-2xl font-bold mb-2">Something went wrong</h2>
+      <p className="text-neutral-600 mb-6">{message}</p>
+      <button
+        onClick={onRetry}
+        className="px-8 py-3 bg-black text-white font-mono text-xs uppercase tracking-wider font-semibold hover:bg-neutral-800 transition-colors"
+      >
+        Try Again
+      </button>
+    </div>
   </div>
 );
 
@@ -169,58 +173,66 @@ const Header = () => {
   const { currentView, navigateTo, likedProducts } = useApp();
 
   return (
-    <header className="fixed top-0 w-full bg-white/95 backdrop-blur-md border-b-2 border-black z-50">
-      <nav className="max-w-[1600px] mx-auto px-8 py-6 flex justify-between items-center">
-        <h1
-          onClick={() => navigateTo('home')}
-          className="font-serif text-4xl font-black tracking-tight cursor-pointer hover:opacity-70 transition-opacity"
-        >
-          STOREFRONT
-        </h1>
-        
-        <div className="flex gap-12 items-center">
+    <header className="border-b-4 border-black bg-white sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="flex items-center justify-between mb-6">
+          <h1
+            onClick={() => navigateTo('home')}
+            className="font-serif text-4xl font-black tracking-tight cursor-pointer hover:opacity-70 transition-opacity"
+          >
+            STOREFRONT
+          </h1>
+        </div>
+
+        <nav className="flex gap-8">
           <button
             onClick={() => navigateTo('home')}
             className={`font-mono text-xs uppercase tracking-[0.2em] font-semibold relative pb-2 transition-colors ${
-              currentView === 'home' ? 'text-rose-500' : 'text-black hover:text-rose-500'
+              currentView === 'home'
+                ? 'text-rose-500'
+                : 'text-black hover:text-rose-500'
             }`}
           >
             Home
             {currentView === 'home' && (
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-rose-500" />
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-rose-500"></div>
             )}
           </button>
-          
+
           <button
             onClick={() => navigateTo('products')}
             className={`font-mono text-xs uppercase tracking-[0.2em] font-semibold relative pb-2 transition-colors ${
-              currentView === 'products' ? 'text-rose-500' : 'text-black hover:text-rose-500'
+              currentView === 'products'
+                ? 'text-rose-500'
+                : 'text-black hover:text-rose-500'
             }`}
           >
             Products
             {currentView === 'products' && (
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-rose-500" />
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-rose-500"></div>
             )}
           </button>
-          
+
           <button
             onClick={() => navigateTo('favorites')}
             className={`font-mono text-xs uppercase tracking-[0.2em] font-semibold relative pb-2 transition-colors ${
-              currentView === 'favorites' ? 'text-rose-500' : 'text-black hover:text-rose-500'
+              currentView === 'favorites'
+                ? 'text-rose-500'
+                : 'text-black hover:text-rose-500'
             }`}
           >
             Favorites
             {likedProducts.length > 0 && (
-              <span className="absolute -top-2 -right-3 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
+              <span className="ml-2 px-2 py-1 bg-rose-500 text-white text-[10px] rounded-full">
                 {likedProducts.length}
               </span>
             )}
             {currentView === 'favorites' && (
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-rose-500" />
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-rose-500"></div>
             )}
           </button>
-        </div>
-      </nav>
+        </nav>
+      </div>
     </header>
   );
 };
@@ -230,20 +242,14 @@ const Hero = () => {
   const { navigateTo } = useApp();
 
   return (
-    <section className="min-h-[70vh] flex items-center justify-center text-center relative bg-gradient-to-br from-neutral-100 to-white border-b-2 border-black overflow-hidden">
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 2px, #e5e5e5 2px, #e5e5e5 4px)`
-        }} />
-      </div>
-      
-      <div className="relative z-10 px-8">
-        <h1 className="font-serif text-7xl md:text-9xl font-black tracking-tighter mb-6 leading-none">
-          CURATED<br />COLLECTION
-        </h1>
-        <p className="text-sm uppercase tracking-[0.3em] text-neutral-600 mb-10 font-mono">
-          Premium Products for Modern Living
+    <section className="bg-neutral-100 border-b-4 border-black">
+      <div className="max-w-7xl mx-auto px-6 py-24 text-center">
+        <p className="font-mono text-xs uppercase tracking-[0.3em] text-neutral-600 mb-4">
+          CURATED COLLECTION
         </p>
+        <h2 className="font-serif text-6xl font-black mb-6 leading-tight">
+          Premium Products<br />for Modern Living
+        </h2>
         <button
           onClick={() => navigateTo('products')}
           className="px-10 py-4 bg-black text-white uppercase tracking-[0.2em] text-sm font-mono font-semibold hover:bg-neutral-800 transition-all border-2 border-black hover:translate-x-[-6px] hover:translate-y-[-6px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
@@ -257,18 +263,17 @@ const Hero = () => {
 
 // Category Card Component
 const CategoryCard = ({ category, count, onClick }) => (
-  <div
+  <button
     onClick={onClick}
-    className="group border-2 border-black p-12 text-center cursor-pointer relative overflow-hidden bg-white transition-all hover:translate-x-[-8px] hover:translate-y-[-8px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+    className="group bg-white border-4 border-black p-8 text-left hover:translate-x-[-6px] hover:translate-y-[-6px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all"
   >
-    <div className="absolute inset-0 bg-black transform scale-0 group-hover:scale-100 transition-transform duration-300 origin-center" />
-    <h3 className="font-serif text-3xl font-bold uppercase relative z-10 transition-colors group-hover:text-white mb-2">
+    <h3 className="font-serif text-3xl font-bold mb-3 capitalize group-hover:text-rose-500 transition-colors">
       {category}
     </h3>
-    <p className="text-sm text-neutral-600 relative z-10 transition-colors group-hover:text-neutral-300 font-mono">
+    <p className="font-mono text-xs uppercase tracking-wider text-neutral-600">
       {count} Products
     </p>
-  </div>
+  </button>
 );
 
 // Home View
@@ -280,23 +285,24 @@ const HomeView = () => {
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto px-8 py-16">
-      <h2 className="font-serif text-5xl font-bold mb-12 pb-6 border-b-2 border-black">
-        Browse by Category
-      </h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {categories.map(category => (
-          <CategoryCard
-            key={category}
-            category={category}
-            count={getCategoryCount(category)}
-            onClick={() => {
-              navigateTo('products');
-              setTimeout(() => filterProducts(category), 100);
-            }}
-          />
-        ))}
+    <div>
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <h2 className="font-serif text-5xl font-black mb-12 text-center">
+          Browse by Category
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {categories.map(category => (
+            <CategoryCard
+              key={category}
+              category={category}
+              count={getCategoryCount(category)}
+              onClick={() => {
+                navigateTo('products');
+                setTimeout(() => filterProducts(category), 100);
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -305,31 +311,32 @@ const HomeView = () => {
 // Product Card Component
 const ProductCard = ({ product }) => {
   const { likedProducts, dislikedProducts, toggleLike, toggleDislike, navigateTo } = useApp();
+
   const isLiked = likedProducts.includes(product.id);
   const isDisliked = dislikedProducts.includes(product.id);
 
   return (
-    <div className="group border-2 border-black bg-white flex flex-col transition-all hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-      <div className="h-80 flex items-center justify-center p-8 bg-neutral-50 border-b-2 border-black overflow-hidden">
+    <div className="bg-white border-4 border-black overflow-hidden group hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all">
+      <div className="relative overflow-hidden bg-neutral-100 aspect-square">
+        <span className="absolute top-4 left-4 px-3 py-1 bg-white border-2 border-black font-mono text-[10px] uppercase tracking-wider z-10">
+          {product.category}
+        </span>
         <img
           src={product.image}
           alt={product.title}
-          className="max-w-[80%] max-h-[80%] object-contain transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-full object-contain p-8 group-hover:scale-105 transition-transform duration-300"
         />
       </div>
-      
-      <div className="p-6 flex flex-col flex-1">
-        <p className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-2 font-mono">
-          {product.category}
-        </p>
-        <h3 className="font-serif text-xl font-semibold mb-3 line-clamp-2 leading-tight">
+
+      <div className="p-6">
+        <h3 className="font-serif text-xl font-bold mb-2 line-clamp-2 min-h-[3.5rem]">
           {product.title}
         </h3>
-        <p className="text-3xl font-bold mb-4 font-mono">
+        <p className="font-mono text-2xl font-black mb-4">
           ${product.price.toFixed(2)}
         </p>
-        
-        <div className="flex gap-3 mt-auto">
+
+        <div className="flex gap-2 mb-3">
           <button
             onClick={() => toggleLike(product.id)}
             className={`flex-1 py-3 border-2 border-black font-mono text-xs uppercase tracking-wider font-semibold transition-all ${
@@ -340,7 +347,7 @@ const ProductCard = ({ product }) => {
           >
             {isLiked ? '♥ Liked' : '♡ Like'}
           </button>
-          
+
           <button
             onClick={() => toggleDislike(product.id)}
             className={`flex-1 py-3 border-2 border-black font-mono text-xs uppercase tracking-wider font-semibold transition-all ${
@@ -352,7 +359,7 @@ const ProductCard = ({ product }) => {
             {isDisliked ? 'Disliked' : 'Dislike'}
           </button>
         </div>
-        
+
         <button
           onClick={() => navigateTo('detail', product)}
           className="w-full mt-3 py-3 bg-black text-white border-2 border-black font-mono text-xs uppercase tracking-wider font-semibold hover:bg-neutral-800 transition-colors"
@@ -369,20 +376,21 @@ const ProductsView = () => {
   const { filteredProducts, categories, currentFilter, filterProducts } = useApp();
 
   return (
-    <div className="max-w-[1600px] mx-auto px-8 py-16">
-      <div className="flex justify-between items-center mb-12 pb-6 border-b-2 border-black flex-wrap gap-4">
-        <h2 className="font-serif text-5xl font-bold">All Products</h2>
-        <div className="flex gap-6 text-sm font-mono">
+    <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="mb-12">
+        <h2 className="font-serif text-5xl font-black mb-4">All Products</h2>
+        <div className="flex gap-4 font-mono text-sm">
           <span className="text-neutral-600">
-            Showing: <strong className="text-black">{filteredProducts.length}</strong>
+            Showing: <span className="font-bold text-black">{filteredProducts.length}</span>
           </span>
+          <span className="text-neutral-400">•</span>
           <span className="text-neutral-600">
-            Category: <strong className="text-black capitalize">{currentFilter === 'all' ? 'All' : currentFilter}</strong>
+            Category: <span className="font-bold text-black capitalize">{currentFilter === 'all' ? 'All' : currentFilter}</span>
           </span>
         </div>
       </div>
 
-      <div className="flex gap-4 flex-wrap mb-12 p-6 border-2 border-black bg-neutral-50">
+      <div className="flex flex-wrap gap-3 mb-12">
         <button
           onClick={() => filterProducts('all')}
           className={`px-6 py-3 border-2 border-black font-mono text-xs uppercase tracking-wider font-semibold transition-all ${
@@ -393,6 +401,7 @@ const ProductsView = () => {
         >
           All Products
         </button>
+
         {categories.map(category => (
           <button
             key={category}
@@ -408,9 +417,13 @@ const ProductsView = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredProducts.map((product, index) => (
-          <div key={product.id} style={{ animationDelay: `${index * 50}ms` }} className="animate-fadeIn">
+          <div
+            key={product.id}
+            style={{ animationDelay: `${index * 50}ms` }}
+            className="animate-fadeIn"
+          >
             <ProductCard product={product} />
           </div>
         ))}
@@ -426,14 +439,11 @@ const FavoritesView = () => {
 
   if (favoriteProducts.length === 0) {
     return (
-      <div className="max-w-[1600px] mx-auto px-8 py-16">
-        <h2 className="font-serif text-5xl font-bold mb-12 pb-6 border-b-2 border-black">
-          Your Favorites
-        </h2>
-        
-        <div className="text-center py-24 border-2 border-black bg-neutral-50">
-          <h3 className="font-serif text-3xl font-bold mb-4">No Favorites Yet</h3>
-          <p className="text-neutral-600 mb-8 font-mono">
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center max-w-md px-6">
+          <h2 className="font-serif text-5xl font-black mb-4">Your Favorites</h2>
+          <p className="font-serif text-2xl text-neutral-500 mb-2">No Favorites Yet</p>
+          <p className="text-neutral-600 mb-8">
             Start exploring and like products to see them here!
           </p>
           <button
@@ -448,14 +458,18 @@ const FavoritesView = () => {
   }
 
   return (
-    <div className="max-w-[1600px] mx-auto px-8 py-16">
-      <h2 className="font-serif text-5xl font-bold mb-12 pb-6 border-b-2 border-black">
+    <div className="max-w-7xl mx-auto px-6 py-16">
+      <h2 className="font-serif text-5xl font-black mb-12">
         Your Favorites ({favoriteProducts.length})
       </h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {favoriteProducts.map((product, index) => (
-          <div key={product.id} style={{ animationDelay: `${index * 50}ms` }} className="animate-fadeIn">
+          <div
+            key={product.id}
+            style={{ animationDelay: `${index * 50}ms` }}
+            className="animate-fadeIn"
+          >
             <ProductCard product={product} />
           </div>
         ))}
@@ -474,60 +488,65 @@ const ProductDetailView = () => {
   const isDisliked = dislikedProducts.includes(selectedProduct.id);
 
   return (
-    <div className="max-w-[1600px] mx-auto px-8 py-16">
+    <div className="max-w-7xl mx-auto px-6 py-16">
       <button
         onClick={() => navigateTo('products')}
         className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-black font-mono text-xs uppercase tracking-wider font-semibold hover:bg-black hover:text-white transition-all mb-8"
       >
-        <ArrowLeft className="w-4 h-4" />
+        <span className="text-lg">←</span>
         Back to Products
       </button>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-        <div className="border-2 border-black p-12 bg-neutral-50 flex items-center justify-center sticky top-32 h-fit">
+      <div className="grid md:grid-cols-2 gap-12">
+        <div className="bg-neutral-100 border-4 border-black p-12 aspect-square flex items-center justify-center">
           <img
             src={selectedProduct.image}
             alt={selectedProduct.title}
-            className="max-w-full max-h-[600px] object-contain"
+            className="max-w-full max-h-full object-contain"
           />
         </div>
 
-        <div className="py-8">
-          <p className="text-sm uppercase tracking-[0.3em] text-neutral-500 mb-4 font-mono">
+        <div>
+          <span className="inline-block px-4 py-2 bg-white border-2 border-black font-mono text-xs uppercase tracking-wider mb-4">
             {selectedProduct.category}
-          </p>
-          
-          <h1 className="font-serif text-5xl md:text-6xl font-bold leading-tight mb-8">
+          </span>
+
+          <h1 className="font-serif text-5xl font-black mb-6 leading-tight">
             {selectedProduct.title}
           </h1>
-          
-          <div className="text-5xl font-bold mb-8 py-6 border-y-2 border-black font-mono">
+
+          <div className="font-mono text-4xl font-black mb-8">
             ${selectedProduct.price.toFixed(2)}
           </div>
 
-          <div className="flex gap-8 mb-8 py-6">
+          <div className="flex gap-8 mb-8 pb-8 border-b-2 border-neutral-200">
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-2 font-mono">
+              <p className="font-mono text-xs uppercase tracking-wider text-neutral-600 mb-2">
                 Rating
               </p>
-              <p className="text-3xl font-bold flex items-center gap-2 font-mono">
-                {selectedProduct.rating.rate}
-                <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
-              </p>
+              <div className="flex items-center gap-2">
+                <span className="text-yellow-400 text-xl">★</span>
+                <span className="font-mono text-xl font-bold">
+                  {selectedProduct.rating.rate}
+                </span>
+              </div>
             </div>
+
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-neutral-500 mb-2 font-mono">
+              <p className="font-mono text-xs uppercase tracking-wider text-neutral-600 mb-2">
                 Reviews
               </p>
-              <p className="text-3xl font-bold font-mono">
+              <p className="font-mono text-xl font-bold">
                 {selectedProduct.rating.count}
               </p>
             </div>
           </div>
 
-          <div className="mb-8 p-8 bg-neutral-50 border-2 border-black">
-            <strong className="font-mono text-sm uppercase tracking-wider block mb-4">Description:</strong>
-            <p className="text-base leading-relaxed text-neutral-700">
+          <div className="mb-8">
+            <h3 className="font-mono text-xs uppercase tracking-wider font-bold mb-4">
+              Description:
+            </h3>
+            <p className="text-neutral-700 leading-relaxed text-lg">
               {selectedProduct.description}
             </p>
           </div>
@@ -543,7 +562,7 @@ const ProductDetailView = () => {
             >
               {isLiked ? '♥ Liked' : '♡ Add to Favorites'}
             </button>
-            
+
             <button
               onClick={() => toggleDislike(selectedProduct.id)}
               className={`flex-1 py-4 border-2 border-black font-mono text-sm uppercase tracking-[0.15em] font-semibold transition-all ${
@@ -569,19 +588,19 @@ const App = () => {
   if (error) return <ErrorState message={error} onRetry={() => window.location.reload()} />;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-neutral-50">
       <Header />
-      <main className="pt-24">
-        {currentView === 'home' && (
-          <>
-            <Hero />
-            <HomeView />
-          </>
-        )}
-        {currentView === 'products' && <ProductsView />}
-        {currentView === 'favorites' && <FavoritesView />}
-        {currentView === 'detail' && <ProductDetailView />}
-      </main>
+
+      {currentView === 'home' && (
+        <>
+          <Hero />
+          <HomeView />
+        </>
+      )}
+
+      {currentView === 'products' && <ProductsView />}
+      {currentView === 'favorites' && <FavoritesView />}
+      {currentView === 'detail' && <ProductDetailView />}
     </div>
   );
 };
