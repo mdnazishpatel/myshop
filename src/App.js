@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
-import { Camera, Heart, ThumbsDown, ArrowLeft, ShoppingBag, Filter, Star, Loader2, AlertCircle } from 'lucide-react';
+import { Camera, Heart, ThumbsDown, ArrowLeft, Bag, Filter, Star, Loader2, AlertCircle } from 'lucide-react';
 
 // ============================================
 // CONTEXT & STATE MANAGEMENT
