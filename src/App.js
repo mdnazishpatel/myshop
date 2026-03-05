@@ -15,13 +15,14 @@ const useApp = () => {
 const AppProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [topCategories, setTopCategories] = useState([]); // New state for top 2 categories
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentFilter, setCurrentFilter] = useState('all');
   const [likedProducts, setLikedProducts] = useState([]);
   const [dislikedProducts, setDislikedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentView, setCurrentView] = useState('products'); // Changed from 'home' to 'products'
+  const [currentView, setCurrentView] = useState('products');
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Fetch data from API
@@ -45,6 +46,20 @@ const AppProvider = ({ children }) => {
         setProducts(productsData);
         setCategories(categoriesData);
         setFilteredProducts(productsData);
+
+        // Calculate top 2 categories by product count
+        const categoryCounts = categoriesData.map(category => ({
+          name: category,
+          count: productsData.filter(p => p.category === category).length
+        }));
+
+        // Sort by count descending and take top 2
+        const top2 = categoryCounts
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 2)
+          .map(c => c.name);
+
+        setTopCategories(top2);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -99,6 +114,7 @@ const AppProvider = ({ children }) => {
   const value = {
     products,
     categories,
+    topCategories, // Add to context
     filteredProducts,
     currentFilter,
     likedProducts,
@@ -273,7 +289,12 @@ const ProductCard = ({ product }) => {
 
 // Products View
 const ProductsView = () => {
-  const { filteredProducts, categories, currentFilter, filterProducts } = useApp();
+  const { filteredProducts, topCategories, currentFilter, filterProducts, products } = useApp();
+
+  // Get product count for display
+  const getCategoryCount = (category) => {
+    return products.filter(p => p.category === category).length;
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-16">
@@ -302,7 +323,7 @@ const ProductsView = () => {
           All Products
         </button>
 
-        {categories.map(category => (
+        {topCategories.map(category => (
           <button
             key={category}
             onClick={() => filterProducts(category)}
@@ -313,6 +334,9 @@ const ProductsView = () => {
             }`}
           >
             {category}
+            <span className="ml-2 text-[10px] opacity-70">
+              ({getCategoryCount(category)})
+            </span>
           </button>
         ))}
       </div>
