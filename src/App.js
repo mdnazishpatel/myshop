@@ -277,36 +277,36 @@ const CategoryCard = ({ category, count, onClick }) => (
 );
 
 // Home View
-const HomeView = () => {
-  const { categories, products, navigateTo, filterProducts } = useApp();
+// const HomeView = () => {
+//   const { categories, products, navigateTo, filterProducts } = useApp();
 
-  const getCategoryCount = (category) => {
-    return products.filter(p => p.category === category).length;
-  };
+//   const getCategoryCount = (category) => {
+//     return products.filter(p => p.category === category).length;
+//   };
 
-  return (
-    <div>
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="font-serif text-5xl font-black mb-12 text-center">
-          Browse by Category
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {categories.map(category => (
-            <CategoryCard
-              key={category}
-              category={category}
-              count={getCategoryCount(category)}
-              onClick={() => {
-                navigateTo('products');
-                setTimeout(() => filterProducts(category), 100);
-              }}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div>
+//       <div className="max-w-7xl mx-auto px-6 py-16">
+//         <h2 className="font-serif text-5xl font-black mb-12 text-center">
+//           Browse by Category
+//         </h2>
+//         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+//           {categories.map(category => (
+//             <CategoryCard
+//               key={category}
+//               category={category}
+//               count={getCategoryCount(category)}
+//               onClick={() => {
+//                 navigateTo('products');
+//                 setTimeout(() => filterProducts(category), 100);
+//               }}
+//             />
+//           ))}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 // Product Card Component
 const ProductCard = ({ product }) => {
