@@ -17,17 +17,11 @@ const AppProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentFilter, setCurrentFilter] = useState('all');
-  const [likedProducts, setLikedProducts] = useState(() => {
-    const saved = localStorage.getItem('likedProducts');
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [dislikedProducts, setDislikedProducts] = useState(() => {
-    const saved = localStorage.getItem('dislikedProducts');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [likedProducts, setLikedProducts] = useState([]);
+  const [dislikedProducts, setDislikedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentView, setCurrentView] = useState('home');
+  const [currentView, setCurrentView] = useState('products'); // Changed from 'home' to 'products'
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Fetch data from API
@@ -60,15 +54,6 @@ const AppProvider = ({ children }) => {
 
     fetchData();
   }, []);
-
-  // Persist likes/dislikes to localStorage
-  useEffect(() => {
-    localStorage.setItem('likedProducts', JSON.stringify(likedProducts));
-  }, [likedProducts]);
-
-  useEffect(() => {
-    localStorage.setItem('dislikedProducts', JSON.stringify(dislikedProducts));
-  }, [dislikedProducts]);
 
   // Filter products
   const filterProducts = (category) => {
@@ -177,7 +162,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-6 py-6">
         <div className="flex items-center justify-between mb-6">
           <h1
-            onClick={() => navigateTo('home')}
+            onClick={() => navigateTo('products')}
             className="font-serif text-4xl font-black tracking-tight cursor-pointer hover:opacity-70 transition-opacity"
           >
             STOREFRONT
@@ -185,20 +170,6 @@ const Header = () => {
         </div>
 
         <nav className="flex gap-8">
-          <button
-            onClick={() => navigateTo('home')}
-            className={`font-mono text-xs uppercase tracking-[0.2em] font-semibold relative pb-2 transition-colors ${
-              currentView === 'home'
-                ? 'text-rose-500'
-                : 'text-black hover:text-rose-500'
-            }`}
-          >
-            Home
-            {currentView === 'home' && (
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-rose-500"></div>
-            )}
-          </button>
-
           <button
             onClick={() => navigateTo('products')}
             className={`font-mono text-xs uppercase tracking-[0.2em] font-semibold relative pb-2 transition-colors ${
@@ -236,77 +207,6 @@ const Header = () => {
     </header>
   );
 };
-
-// Hero Component
-// const Hero = () => {
-//   const { navigateTo } = useApp();
-
-//   return (
-//     <section className="bg-neutral-100 border-b-4 border-black">
-//       <div className="max-w-7xl mx-auto px-6 py-24 text-center">
-//         <p className="font-mono text-xs uppercase tracking-[0.3em] text-neutral-600 mb-4">
-//           CURATED COLLECTION
-//         </p>
-//         <h2 className="font-serif text-6xl font-black mb-6 leading-tight">
-//           Premium Products<br />for Modern Living
-//         </h2>
-//         <button
-//           onClick={() => navigateTo('products')}
-//           className="px-10 py-4 bg-black text-white uppercase tracking-[0.2em] text-sm font-mono font-semibold hover:bg-neutral-800 transition-all border-2 border-black hover:translate-x-[-6px] hover:translate-y-[-6px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
-//         >
-//           Explore Now
-//         </button>
-//       </div>
-//     </section>
-//   );
-// };
-
-// Category Card Component
-const CategoryCard = ({ category, count, onClick }) => (
-  <button
-    onClick={onClick}
-    className="group bg-white border-4 border-black p-8 text-left hover:translate-x-[-6px] hover:translate-y-[-6px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all"
-  >
-    <h3 className="font-serif text-3xl font-bold mb-3 capitalize group-hover:text-rose-500 transition-colors">
-      {category}
-    </h3>
-    <p className="font-mono text-xs uppercase tracking-wider text-neutral-600">
-      {count} Products
-    </p>
-  </button>
-);
-
-// Home View
-// const HomeView = () => {
-//   const { categories, products, navigateTo, filterProducts } = useApp();
-
-//   const getCategoryCount = (category) => {
-//     return products.filter(p => p.category === category).length;
-//   };
-
-//   return (
-//     <div>
-//       <div className="max-w-7xl mx-auto px-6 py-16">
-//         <h2 className="font-serif text-5xl font-black mb-12 text-center">
-//           Browse by Category
-//         </h2>
-//         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-//           {categories.map(category => (
-//             <CategoryCard
-//               key={category}
-//               category={category}
-//               count={getCategoryCount(category)}
-//               onClick={() => {
-//                 navigateTo('products');
-//                 setTimeout(() => filterProducts(category), 100);
-//               }}
-//             />
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
 // Product Card Component
 const ProductCard = ({ product }) => {
@@ -582,7 +482,7 @@ const ProductDetailView = () => {
 
 // Main App Component
 const App = () => {
-  const { loading, error, currentView, } = useApp();
+  const { loading, error, currentView } = useApp();
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorState message={error} onRetry={() => window.location.reload()} />;
@@ -590,13 +490,6 @@ const App = () => {
   return (
     <div className="min-h-screen bg-neutral-50">
       <Header />
-
-      {currentView === 'home' && (
-        <>
-          <Hero />
-          <HomeView />
-        </>
-      )}
 
       {currentView === 'products' && <ProductsView />}
       {currentView === 'favorites' && <FavoritesView />}
