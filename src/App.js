@@ -238,28 +238,28 @@ const Header = () => {
 };
 
 // Hero Component
-const Hero = () => {
-  const { navigateTo } = useApp();
+// const Hero = () => {
+//   const { navigateTo } = useApp();
 
-  return (
-    <section className="bg-neutral-100 border-b-4 border-black">
-      <div className="max-w-7xl mx-auto px-6 py-24 text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.3em] text-neutral-600 mb-4">
-          CURATED COLLECTION
-        </p>
-        <h2 className="font-serif text-6xl font-black mb-6 leading-tight">
-          Premium Products<br />for Modern Living
-        </h2>
-        <button
-          onClick={() => navigateTo('products')}
-          className="px-10 py-4 bg-black text-white uppercase tracking-[0.2em] text-sm font-mono font-semibold hover:bg-neutral-800 transition-all border-2 border-black hover:translate-x-[-6px] hover:translate-y-[-6px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
-        >
-          Explore Now
-        </button>
-      </div>
-    </section>
-  );
-};
+//   return (
+//     <section className="bg-neutral-100 border-b-4 border-black">
+//       <div className="max-w-7xl mx-auto px-6 py-24 text-center">
+//         <p className="font-mono text-xs uppercase tracking-[0.3em] text-neutral-600 mb-4">
+//           CURATED COLLECTION
+//         </p>
+//         <h2 className="font-serif text-6xl font-black mb-6 leading-tight">
+//           Premium Products<br />for Modern Living
+//         </h2>
+//         <button
+//           onClick={() => navigateTo('products')}
+//           className="px-10 py-4 bg-black text-white uppercase tracking-[0.2em] text-sm font-mono font-semibold hover:bg-neutral-800 transition-all border-2 border-black hover:translate-x-[-6px] hover:translate-y-[-6px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
+//         >
+//           Explore Now
+//         </button>
+//       </div>
+//     </section>
+//   );
+// };
 
 // Category Card Component
 const CategoryCard = ({ category, count, onClick }) => (
